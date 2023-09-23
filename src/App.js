@@ -60,7 +60,7 @@ function App() {
 
   return (
     <div>
-      <Navigation account={account} setAccount={setAccount} />
+      <Navigation account={account} setAccount={setAccount} dappazon={dappazon} provider={provider} />
 
       <h2>Dappazon Best Sellers</h2>
 

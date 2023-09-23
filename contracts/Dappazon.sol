@@ -87,7 +87,7 @@ contract Dappazon {
         items[_id].stock = item.stock - 1;
 
         // Pay to owner
-        payable(owner).transfer(address(this).balance);
+        // payable(owner).transfer(address(this).balance);
         
         //(bool success, ) = owner.call{value: address(this).balance}("");
         //require(success);

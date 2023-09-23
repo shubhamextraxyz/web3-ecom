@@ -1,10 +1,32 @@
 import { ethers } from 'ethers'
+import { useEffect, useState } from 'react';
 
-const Navigation = ({ account, setAccount }) => {
+const Navigation = ({ account, setAccount, dappazon, provider }) => {
+
+    const [owner, setOwner] = useState(null)
+
+    const fetchOwner = async () => {
+        if(dappazon){
+            const owner = await dappazon.owner()
+            setOwner(owner)
+        }
+    }
+
+    useEffect(() => {
+        fetchOwner()   
+    }, [dappazon, account])
+
     const connectHandler = async () => {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         const account = ethers.utils.getAddress(accounts[0])
         setAccount(account);
+        
+    }
+
+    const withDrawHandler = async () => {
+        // Withdraw
+        let transaction = await dappazon.connect(await dappazon.owner()).withdraw()
+        await transaction.wait()
     }
 
     return (
@@ -19,12 +41,25 @@ const Navigation = ({ account, setAccount }) => {
             />
 
             {account ? (
+                <>
                 <button
                     type="button"
                     className='nav__connect'
                 >
                     {account.slice(0, 6) + '...' + account.slice(38, 42)}
+                    {console.log('AYA', )}
                 </button>
+
+                {account && owner && account === owner ? (<button
+                    type="button"
+                    className='nav__connect'
+                    onClick={withDrawHandler}
+                >
+                    Withdrwa Funds
+                </button>):("")
+                }
+
+                </>
             ) : (
                 <button
                     type="button"
